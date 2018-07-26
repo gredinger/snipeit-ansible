@@ -37,7 +37,7 @@
     - php-gd
     - php-dom
     - php-mcrypt
-    - ext-bcmath
+    - php-bcmath
   when: ansible_distribution_major_version == "16"
 
 - name: Clone Snipe-IT repo
