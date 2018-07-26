@@ -38,6 +38,7 @@
     - php-dom
     - php-mcrypt
     - php-bcmath
+    - python-mysqldb
   when: ansible_distribution_major_version == "16"
 
 - name: Clone Snipe-IT repo
@@ -71,13 +72,17 @@
   when: ansible_distribution_major_version == "16"
 
 - name: Install composer locally
-  shell: curl -sS https://getcomposer.org/installer | php chdir={{ snipeit_source }} creates={{ snipeit_source }}/composer.phar
+  shell: curl -sS https://getcomposer.org/installer | php
+  args:
+    chdir: "{{ snipeit_source }}"
 
 - name: Install php requirements with composer
-  shell: php {{ snipeit_source }}/composer.phar install --no-dev --prefer-source --working-dir {{ snipeit_source }}
+  shell: php {{ snipeit_source }}/composer.phar install --no-dev --prefer-source
 
-#- name: Generate production app key
-#  shell: php artisan key:generate --env=production chdir={{ snipeit_source }}
+- name: Generate production app key
+  shell: php artisan key:generate --env=production 
+  args:
+    chdir: "{{ snipeit_source }}"
 
 - name: Make sure MySQL server is running and starts on boot
   service: name=mysql state=started enabled=yes
@@ -106,13 +111,15 @@
   template: src=artisan_expect.exp.j2 dest={{ snipeit_source }}/artisan_expect.exp mode=0755
 
 - name: Install Snipe-IT Application with Artisan
-  shell: ./artisan_expect.exp chdir={{ snipeit_source }}
+  shell: ./artisan_expect.exp 
+  args:
+    chdir: "{{ snipeit_source }}"
   when: db_status|changed
 
 - name: Fix app/storage and public/uploads folders permissions
   file: path={{ item }} recurse=yes group=www-data mode=0775
   with_items:
-    - "{{ snipeit_source }}/app/storage"
+    - "{{ snipeit_source }}/storage"
     - "{{ snipeit_source }}/public/uploads"
 
 
