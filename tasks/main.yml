@@ -38,6 +38,7 @@
     - php-dom
     - php-mcrypt
   when: ansible_distribution_major_version == "16"
+
 - name: Clone Snipe-IT repo
   git: repo=https://github.com/snipe/snipe-it.git force=yes version={{ snipeit_version }} dest={{ snipeit_source }}
 
@@ -45,13 +46,13 @@
   template: src=start.php.j2 dest={{ snipeit_source }}/bootstrap/start.php
 
 - name: Update production database configuration template
-  template: src=database.php.j2 dest={{ snipeit_source }}/app/config/production/database.php
+  template: src=database.php.j2 dest={{ snipeit_source }}/config/database.php
 
 - name: Update production app configuration
-  template: src=app.php.j2 dest={{ snipeit_source }}/app/config/production/app.php
+  template: src=app.php.j2 dest={{ snipeit_source }}/config/app.php
 
 - name: Update production mail settings
-  template: src=mail.php.j2 dest={{ snipeit_source }}/app/config/production/mail.php
+  template: src=mail.php.j2 dest={{ snipeit_source }}/config/mail.php
 
 - name: Enable php extensions
   shell: php5enmod {{ item }}
