@@ -73,7 +73,7 @@
   shell: curl -sS https://getcomposer.org/installer | php chdir={{ snipeit_source }} creates={{ snipeit_source }}/composer.phar
 
 - name: Install php requirements with composer
-  shell: php composer.phar install --prefer-source --no-interaction chdir={{ snipeit_source }}
+  shell: php composer.phar install --no-dev --prefer-source --working-dir {{ snipeit_source }}
 
 - name: Generate production app key
   shell: php artisan key:generate --env=production chdir={{ snipeit_source }}
