@@ -76,8 +76,8 @@
 - name: Install php requirements with composer
   shell: php {{ snipeit_source }}/composer.phar install --no-dev --prefer-source --working-dir {{ snipeit_source }}
 
-- name: Generate production app key
-  shell: php artisan key:generate --env=production chdir={{ snipeit_source }}
+#- name: Generate production app key
+#  shell: php artisan key:generate --env=production chdir={{ snipeit_source }}
 
 - name: Make sure MySQL server is running and starts on boot
   service: name=mysql state=started enabled=yes
