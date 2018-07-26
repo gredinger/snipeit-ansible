@@ -37,6 +37,7 @@
     - php-gd
     - php-dom
     - php-mcrypt
+    - ext-bcmath
   when: ansible_distribution_major_version == "16"
 
 - name: Clone Snipe-IT repo
@@ -73,7 +74,7 @@
   shell: curl -sS https://getcomposer.org/installer | php chdir={{ snipeit_source }} creates={{ snipeit_source }}/composer.phar
 
 - name: Install php requirements with composer
-  shell: php composer.phar install --no-dev --prefer-source --working-dir {{ snipeit_source }}
+  shell: php {{ snipeit_source }}/composer.phar install --no-dev --prefer-source --working-dir {{ snipeit_source }}
 
 - name: Generate production app key
   shell: php artisan key:generate --env=production chdir={{ snipeit_source }}
