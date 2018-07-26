@@ -16,7 +16,28 @@
     # Below package are required for automated installation with ansible
     - python-mysqldb
     - expect
-
+  when: ansible_distribution_major_version == "14" or
+        ansible_distribution_major_version == "12"
+        
+- name: Install Requirements
+  apt: name={{ item }} state=latest update_cache=yes cache_valid_time=3600
+  with_items:
+    - git
+    - apache2
+    - mysql-server
+    - php
+    - php-pdo
+    - php-mbstring
+    - php-tokenizer
+    - php-curl
+    - php-mysql
+    - php-ldap
+    - php-zip
+    - php-fileinfo
+    - php-gd
+    - php-dom
+    - php-mcrypt
+  when: ansible_distribution_major_version == "16"
 - name: Clone Snipe-IT repo
   git: repo=https://github.com/snipe/snipe-it.git force=yes version={{ snipeit_version }} dest={{ snipeit_source }}
 
@@ -37,6 +58,15 @@
   with_items:
     - mcrypt
     - pdo_mysql
+  when: ansible_distribution_major_version == "14" or
+        ansible_distribution_major_version == "12"
+
+- name: Enable php extensions
+  shell: phpenmod {{ item }}
+  with_items:
+    - mcrypt
+    - pdo_mysql
+  when: ansible_distribution_major_version == "16"
 
 - name: Install composer locally
   shell: curl -sS https://getcomposer.org/installer | php chdir={{ snipeit_source }} creates={{ snipeit_source }}/composer.phar

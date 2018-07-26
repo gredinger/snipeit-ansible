@@ -5,8 +5,9 @@ galaxy_info:
   platforms:
   - name: Ubuntu
     versions:
-    - trusty
+      - trusty
+      - xenial
   categories:
-  - system
+    - system
   min_ansible_version: 1.6
 dependencies: []
